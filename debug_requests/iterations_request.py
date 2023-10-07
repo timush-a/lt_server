@@ -39,4 +39,11 @@ req_body = {
 
 
 if __name__ == "__main__":
-    pass
+    import requests
+    from pprint import pprint
+    from time import perf_counter
+    URL = 'http://0.0.0.0:8000/android_stress_test/add_result'
+    start = perf_counter()
+    response = requests.post(URL, json=req_body)
+    print(f"Elapsed time >>> {round((perf_counter() - start) * 1000, 2)} ms")
+    pprint(response.text)
