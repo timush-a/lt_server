@@ -1,6 +1,6 @@
 {
   "host":  "0.0.0.0",
-  "port": 8000,
+  "port": 8079,
   "logs_path": "logs/app.log",
   "log_level": 20,
   "save_path": "results",
