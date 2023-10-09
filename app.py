@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     set_up(config)
 
-    _logger = get_logger(filename=config['logs_path'])
+    _logger = get_logger(filename=config['logs_path'], level=config['log_level'])
     app = create_web_app(_logger, config)
 
     web.run_app(app, host=config['host'], port=config['port'], access_log=None)

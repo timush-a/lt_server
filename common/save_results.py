@@ -22,14 +22,15 @@ class SaveResult:
                          test_result: TestRunResult) -> None:
         try:
             filename = f"{get_test_filename(run_cfg)}.json"
-            path = os.path.join(self.json_save_path, filename)
-            if not os.path.exists(path):
+            file_path = os.path.join(self.json_save_path, filename)
+            if not os.path.exists(file_path):
                 data = {}
             else:
-                data = load_json(filename)
-            self._update_test_type_results(data, keys, result=result)
-            with open(filename, 'w') as f:
-                json.dump(data, f)
+                data = load_json(file_path)
+            device_model, sdk_version, measurements = self.get_json_data_to_write(test_result)
+            self._update_test_type_results(data, device_model, sdk_version, result=measurements)
+            with open(file_path, 'w') as f:
+                json.dump(data, f, indent=2)
         except Exception as e:
             self.logger.exception(e)
             raise SaveException("Error saving the json file")
@@ -47,6 +48,7 @@ class SaveResult:
             )
             file_path = os.path.join(self.csv_save_path, f"{get_datetime()}__{filename}")
             self._write_to_csv(file_path, measurements)
+
         except Exception as e:
             self.logger.exception(e)
             raise SaveException("Error saving the csv file")
@@ -78,6 +80,21 @@ class SaveResult:
         except Exception as e:
             self.logger.exception(e)
             raise SaveException("Error updating test results")
+
+    @staticmethod
+    def get_json_data_to_write(test_result: TestRunResult) -> Tuple[str, str, dict]:
+        data = (
+            test_result.device_model,
+            test_result.version,
+            {
+                'time': test_result.timings,
+                'battery_temp': test_result.battery_temperature,
+                'cpu_temp': test_result.cpu_temperature,
+                'free_ram': test_result.available_ram,
+                'free_ram_percent': test_result.available_ram_percent
+            }
+        )
+        return data
 
 
 def get_test_filename(run_cfg: Union[TestRunIteraionsConfig, TestRunTimeConfig]):

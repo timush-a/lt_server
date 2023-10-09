@@ -2,6 +2,7 @@
   "host":  "0.0.0.0",
   "port": 8000,
   "logs_path": "logs/app.log",
+  "log_level": 20,
   "save_path": "results",
   "json_save_path": "results/json_files",
   "csv_save_path": "results/csv_files",
