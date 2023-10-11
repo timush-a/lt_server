@@ -32,6 +32,7 @@ class LTHandlers:
         Parsing the request and saving the result in csv and json files.
         """
         request_body = await request.json()
+        self.logger.info(request_body)
         try:
             run_config = self.get_run_config(request_body)
             result = self.get_test_run_result(request_body)
