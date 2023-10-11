@@ -12,8 +12,8 @@ async def send_request(url: str, body: dict):
 
 if __name__ == "__main__":
     import asyncio
-    from time_request import req_body
-    URL = 'http://0.0.0.0:8000/android_stress_test/add_result'
+    from debug_requests.time_request import req_body
+    URL = 'http://0.0.0.0:8079/add_result'
     tasks = list()
     for _ in range(1):
         req_body['version'] = str(_)
