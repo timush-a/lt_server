@@ -66,22 +66,22 @@ class LTHandlers:
     async def download(self, request: web.Request) -> web.Response:
         pass
 
-    @staticmethod
-    def get_run_config(request_body: dict) -> Union[TestRunIteraionsConfig, TestRunTimeConfig]:
-        run_config = request_body['runConfig']
-        test_pipeline = sorted(run_config['scenario'])
-        threads_count = run_config['threadCount']
-        image_size = run_config['imageResolution']
-        if run_config.get('iterations'):
-            return TestRunIteraionsConfig(test_pipeline, threads_count, image_size, run_config['iterations'])
-        if run_config.get('timeConfiguration'):
-            time_config = run_config['timeConfiguration']
-            test_time = time_config['testingTime']
-            standy_time = time_config['standbyTime']
-            repeat_count = time_config['repeatCnt']
-            return TestRunTimeConfig(test_pipeline, threads_count, image_size, test_time, standy_time, repeat_count)
-        else:
-            raise Exception('Invalid test type')
+    def get_run_config(self, request_body: dict) -> Union[TestRunIteraionsConfig, TestRunTimeConfig]:
+        try:
+            run_config = request_body['runConfig']
+            test_pipeline = sorted(run_config['scenario'])
+            threads_count = run_config['threadCount']
+            image_size = run_config['imageResolution']
+            if run_config.get('iterations'):
+                return TestRunIteraionsConfig(test_pipeline, threads_count, image_size, run_config['iterations'])
+            if run_config.get('timeConfiguration'):
+                time_config = run_config['timeConfiguration']
+                test_time = time_config['testingTime']
+                standy_time = time_config['standbyTime']
+                repeat_count = time_config['repeatCnt']
+                return TestRunTimeConfig(test_pipeline, threads_count, image_size, test_time, standy_time, repeat_count)
+        except Exception as e:
+            self.logger.exception(e)
 
     @staticmethod
     def get_test_run_result(request_body: dict) -> TestRunResult:
